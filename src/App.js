@@ -1,14 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
 
 async function fetch_data() {
-
   // this code returns promise fulfilled. no error, just I cant log any data.
-
-  fetch('https://assignments.reaktor.com/birdnest/drones/', {
-    mode: 'no-cors',
+  axios.get('https://assignments.reaktor.com/birdnest/drones/', {
+    'Access-Control-Allow-Origin': '*',
   })
-    .then((response) => response.text())
     .then((textResponse) => {
       // let response_doc = new DOMParser().parseFromString(textResponse, 'application/xml');
       console.log('response is ', textResponse);
@@ -16,15 +14,6 @@ async function fetch_data() {
     })
     .catch((error) => {
       console.log(error);
-    });
-
-  fetch('https://assignments.reaktor.com/birdnest/drones/', {
-    mode: 'no-cors',
-  })
-    .then((response) => {
-      console.log("on another love");
-      console.log(response.text());
-      return response.text();
     });
 }
 
