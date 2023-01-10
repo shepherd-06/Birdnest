@@ -1,16 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
+import { XMLParser } from 'fast-xml-parser';
 
 async function fetch_data() {
-  // this code returns promise fulfilled. no error, just I cant log any data.
   axios.get('https://assignments.reaktor.com/birdnest/drones/', {
     'Access-Control-Allow-Origin': '*',
   })
     .then((textResponse) => {
-      // let response_doc = new DOMParser().parseFromString(textResponse, 'application/xml');
-      console.log('response is ', textResponse);
-      console.log('len ', textResponse.length);
+      let parsed_xml = new XMLParser().parse(textResponse['data']);
+      let report = parsed_xml['report'];
+      console.log(report);
     })
     .catch((error) => {
       console.log(error);
