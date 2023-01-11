@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# BirdNest
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a pre-assignment for Reaktor Summer Trainee. Details of the assignment is in https://assignments.reaktor.com/birdnest/.
 
 ## Available Scripts
 
