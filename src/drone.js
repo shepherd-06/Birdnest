@@ -4,20 +4,17 @@ function Drone(drones) {
     if (drones["drones"] != null) {
         let drone_list = drones["drones"]["capture"]["drone"];
         console.log(drone_list);
-        for (let i = 0; i < drone_list.length; i++) {
-            console.log(i, " --> ", drone_list[i]);
-        }
         return (
-            <ul>
+            <ol>
                 {
-                    // drone_list.map((value, index) => {
-                    //     return <li key={index}>{value}</li>
-                    // })
+                    drone_list.map((value, index) => {
+                        return <DroneView
+                            drone={value}
+                            id={index}
+                        ></DroneView>
+                    })
                 }
-            </ul>
-            // <div>
-            //     <DroneView />
-            // </div >
+            </ol >
         );
     } else {
         return (
