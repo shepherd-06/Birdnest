@@ -20,7 +20,6 @@ function DeviceInformation(props) {
                 <p>    Last Updated at: {last_update[0] + " / " + last_update[1] + " / "
                     + last_update[2] + " at " + last_update[3] + ":" + last_update[4]
                     + ":" + last_update[5]} </p>
-                <p>    Next Update In: { } </p>
             </div>
         );
     } else {

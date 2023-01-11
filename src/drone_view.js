@@ -1,28 +1,18 @@
 import React from "react";
 
 class DroneView extends React.Component {
-
+    // TODO: add pilot information from here. add a button and some way to display pilot data
     constructor(props) {
         super(props);
         this.state = {
             drone: null,
             id: null,
-            // serial_number: null,
-            // model: null,
-            // manufacturer: null,
-            // mac: null,
-            // ipv4: null,
-            // ipv6: null,
-            // firmware: null,
-            // positionY: null,
-            // positionX: null,
-            // altitude: null,
         };
     }
     render() {
         return (
-            <div id={this.props.id}>
-                <li>
+            <div className="row">
+                <li key={this.props.id} >
                     <p>Drone Model: {this.props.drone["model"]}</p>
                     <p>Drone Serial Number: {this.props.drone["serial_number"]}</p>
                     <p>Drone Altitude: {this.props.drone["altitude"]}</p>

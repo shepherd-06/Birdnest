@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
+import React from 'react';
 
 import axios from 'axios';
 import { XMLParser } from 'fast-xml-parser';
@@ -36,19 +36,10 @@ class App extends React.Component {
   }
 
   render() {
-    // console.log("-------");
-    // console.log(this.state.last_update_ms);
-    // console.log("-------");
     return (
       <div className="container">
-        {/* <header className="App-header">
-        TODO: Show header information by this bar Later
-        </header> */}
-
-        {/* Main body */}
         <div className="row">
           <div className="col-lg-12">
-            {/* some empty space for now */}
             <br />
             <div className="col-md-6">
               {/* this pane will be used to view random information, like last check, current time etc */}
