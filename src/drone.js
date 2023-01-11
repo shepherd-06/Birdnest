@@ -3,7 +3,7 @@ import DroneView from './drone_view';
 function Drone(drones) {
     if (drones["drones"] != null) {
         let drone_list = drones["drones"]["capture"]["drone"];
-        console.log(drone_list);
+        // console.log(drone_list);
         return (
             <ol>
                 {

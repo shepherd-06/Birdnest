@@ -1,26 +1,11 @@
 import './App.css';
 import React, { useState } from 'react';
-import './drone';
-import Drone from './drone';
 
 import axios from 'axios';
 import { XMLParser } from 'fast-xml-parser';
 
-
-// function fetch_data(setReport) {
-//   axios.get('https://assignments.reaktor.com/birdnest/drones/', {
-//     'Access-Control-Allow-Origin': '*',
-//   })
-//     .then((textResponse) => {
-//       let parsed_xml = new XMLParser().parse(textResponse['data']);
-//       let report = parsed_xml['report'];
-//       console.log(report);
-//       setReport(report);
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// }
+import Drone from './drone';
+import DeviceInformation from './device_information';
 
 class App extends React.Component {
 
@@ -29,11 +14,11 @@ class App extends React.Component {
     this.state = {
       report: null,
       counter: 0,
+      last_update_ms: null,
     };
   }
 
   componentDidMount() {
-    // fetch_data(this.setReport());
     axios.get('https://assignments.reaktor.com/birdnest/drones/', {
       'Access-Control-Allow-Origin': '*',
     })
@@ -41,7 +26,8 @@ class App extends React.Component {
         let parsed_xml = new XMLParser().parse(textResponse['data']);
         let report_data = parsed_xml['report'];
         this.setState({
-          report: report_data
+          report: report_data,
+          last_update_ms: Date.now(),
         })
       })
       .catch((error) => {
@@ -51,7 +37,7 @@ class App extends React.Component {
 
   render() {
     // console.log("-------");
-    // console.log(this.state.report);
+    // console.log(this.state.last_update_ms);
     // console.log("-------");
     return (
       <div className="container">
@@ -60,20 +46,26 @@ class App extends React.Component {
         </header> */}
 
         {/* Main body */}
-        <div className='col-lg-12'>
-
-          {/* some empty space for now */}
-          <br></br>
-          <div className="col-lg-6">
-            {/* we will view the list of drones in the left side of the pane. */}
-            <Drone drones={this.state.report} />
-          </div>
-
-          <div className='col-lg-6'>
-            {/* this pane will be used to view random information, like last check, current time etc */}
+        <div className="row">
+          <div className="col-lg-12">
+            {/* some empty space for now */}
+            <br />
+            <div className="col-md-6">
+              {/* this pane will be used to view random information, like last check, current time etc */}
+              <div className="row">
+                <h1> Device and Update Information</h1>
+                <DeviceInformation
+                  props={[this.state.report, this.state.last_update_ms]} />
+              </div>
+            </div>
+            <br />
+            <div className="col-md-6">
+              {/* we will view the list of drones in the left side of the pane. */}
+              <h1> Violated Drone List</h1>
+              <Drone drones={this.state.report} />
+            </div>
           </div>
         </div>
-
       </div>
     );
   }
