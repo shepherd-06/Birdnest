@@ -61,7 +61,8 @@ class App extends React.Component {
     /**
      *  check if new data already exist in the list,
      *  and update the latest position
-     *  
+     * 
+     *  TODO: there's a bug in this function. it repeats the same drone multiple times.
      */
     let temp_list = [];
     for (let i = 0; i < new_drones.length; i++) {
@@ -74,11 +75,12 @@ class App extends React.Component {
           old_drones["drones"]["last_seen"] = new_drones["last_seen"];
         } else {
           // new drone. add in the list
-          temp_list = temp_list.concat(new_drones[i]);
+          // temp_list = temp_list.concat(new_drones[i]);
+          old_drones["drones"] = old_drones["drones"].concat(new_drones[i]);
         }
       }
     }
-    old_drones["drones"] = old_drones["drones"].concat(temp_list);
+    // old_drones["drones"] = old_drones["drones"].concat(temp_list);
     return old_drones;
   }
 
