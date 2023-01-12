@@ -14,7 +14,7 @@ class DroneView extends React.Component {
             <div className="row">
                 <li key={this.props.id} >
                     <p>Drone Model: {this.props.drone["model"]}</p>
-                    <p>Drone Serial Number: {this.props.drone["serial_number"]}</p>
+                    <p>Drone Serial Number: {this.props.drone["serialNumber"]}</p>
                     <p>Drone Altitude: {this.props.drone["altitude"]}</p>
                     <p>Drone position (X, Y): {this.props.drone["positionX"]}, {this.props.drone["positionY"]}</p>
                 </li>

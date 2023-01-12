@@ -1,9 +1,8 @@
 function DeviceInformation(props) {
     if (props["props"][0] != null) {
         let information = props["props"][0];
-        information = information["deviceInformation"]
-
         let last_update_ms = props["props"][1];
+
         const last_update = [
             new Date(last_update_ms).getFullYear(),
             new Date(last_update_ms).getMonth() + 1,

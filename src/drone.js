@@ -1,8 +1,8 @@
 import DroneView from './drone_view';
 
-function Drone(drones) {
-    if (drones["drones"] != null) {
-        let drone_list = drones["drones"]["capture"]["drone"];
+function Drone(props) {
+    if (props["props"] != null) {
+        let drone_list = props["props"]["drones"];
         return (
             <ol key="oi">
                 {
@@ -15,13 +15,13 @@ function Drone(drones) {
                 }
             </ol >
         );
-    } else {
-        return (
-            <div>
-                <p> modify empty val</p>
-            </div>
-        )
     }
+    return (
+        <div>
+            {/* TODO: <create view here> */}
+            <p> modify empty val</p>
+        </div>
+    )
 }
 
 export default Drone;
