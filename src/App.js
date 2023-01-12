@@ -18,6 +18,70 @@ class App extends React.Component {
     };
   }
 
+
+  getDistance(x, y) {
+    /**
+     * takes x, y and calculates the distance from the center (250000,250000)
+     * 
+     * returns distance
+     */
+    let x1 = x - 250000;
+    let y1 = y - 250000;
+
+    return Math.sqrt(x1 * x1 + y1 * y1);
+  }
+
+  checkViolation(new_drones) {
+    /**
+     * checks drone violation.
+     * calculate the distance from the nest.
+     * could return empty list, if no violation
+     * add the violation time in the list.
+     * 
+     * returns list. 
+     */
+    let violated_drones = [];
+
+    for (let i = 0; i < new_drones.length; i++) {
+      let positionX = new_drones[i]["positionX"];
+      let positionY = new_drones[i]["positionY"];
+      let distance = this.getDistance(positionX, positionY);
+
+      if (distance <= 100000) {
+        new_drones[i]["distance"] = distance / 1000;
+        new_drones[i]["last_seen"] = Date.now();
+
+        violated_drones = violated_drones.concat(new_drones[i]);
+      }
+    }
+    return violated_drones;
+  }
+
+  filter(old_drones, new_drones) {
+    /**
+     *  check if new data already exist in the list,
+     *  and update the latest position
+     *  
+     */
+    let temp_list = [];
+    for (let i = 0; i < new_drones.length; i++) {
+      let serial_number = new_drones[i]["serialNumber"];
+
+      for (let j = 0; j < old_drones["drones"].length; j++) {
+        if (old_drones["drones"]["serialNumber"] === serial_number) {
+          // drone exist in the list. update the information.
+          old_drones["drones"]["distance"] = new_drones["distance"];
+          old_drones["drones"]["last_seen"] = new_drones["last_seen"];
+        } else {
+          // new drone. add in the list
+          temp_list = temp_list.concat(new_drones[i]);
+        }
+      }
+    }
+    old_drones["drones"] = old_drones["drones"].concat(temp_list);
+    return old_drones;
+  }
+
   componentDidMount() {
     let drone_list = localStorage.getItem('drones');
     // why doesnt this if block work?
@@ -50,17 +114,17 @@ class App extends React.Component {
               })
             }
           }
-
-          // filter old drone position with new position here.
+          // violation filter
+          new_drones = this.checkViolation(new_drones);
 
           if (drone_list["drones"].length === 0) {
+            // no need to filter anything.
             drone_list = {
               "drones": new_drones
             }
           } else {
-            drone_list = {
-              "drones": drone_list["drones"].concat(new_drones)
-            };
+            // filter old drone position with new position here.
+            drone_list = this.filter(drone_list, new_drones);
           }
           localStorage.setItem('drones', JSON.stringify(drone_list));
 
