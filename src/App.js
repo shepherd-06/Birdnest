@@ -66,6 +66,7 @@ class App extends React.Component {
      *  TODO: there's a bug in this function. it repeats the same drone multiple times.
      */
     console.log("old drones ", old_drones["drones"].length, " new drones ", new_drones.length);
+    let new_added = 0;
 
     for (let i = 0; i < new_drones.length; i++) {
       const serial_number = new_drones[i]["serialNumber"];
@@ -83,12 +84,18 @@ class App extends React.Component {
       if (!is_found) {
         // no match in the existing list. can be added directly
         old_drones["drones"] = old_drones["drones"].concat(new_drones[i]);
+        new_added += 1;
       }
     }
+    console.log("new added in the list ", new_added);
     return old_drones;
   }
 
-  componentDidMount() {
+  getLocalData() {
+    /**
+     * go to localStorage, check drones,
+     * update states, if not NULL.
+     */
     let drone_list = localStorage.getItem('drones');
     // why doesnt this if block work?
     if (drone_list !== null || drone_list !== 'undefined') {
@@ -97,13 +104,26 @@ class App extends React.Component {
         drone_list = {
           "drones": []
         };
+        localStorage.setItem('drones', JSON.stringify(drone_list));
       }
       this.setState({
         drones: drone_list,
         last_update_ms: Date.now(),
       });
-      localStorage.setItem('drones', JSON.stringify(drone_list));
+      return drone_list;
     }
+    // default fall back.
+    return {
+      "drones": []
+    };
+  }
+
+  mainEngine() {
+    /**
+     * main func.
+     * it runs the api scheduler.
+     */
+    let drone_list = this.getLocalData();
 
     axios.get('https://assignments.reaktor.com/birdnest/drones/', {
       'Access-Control-Allow-Origin': '*',
@@ -147,12 +167,14 @@ class App extends React.Component {
       .catch((error) => {
         console.log(error);
       });
+  }
 
-    // setInterval(() => {
-    //   /*
-    //       Run any function or setState here
-    //   */
-    // }, 5000);
+  componentDidMount() {
+    // update the view?
+    this.getLocalData();
+    setInterval(() => {
+      this.mainEngine();
+    }, 15000);
   }
 
   render() {
