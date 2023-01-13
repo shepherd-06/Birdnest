@@ -17,17 +17,30 @@ function Drone(props) {
                 </ol >
             );
         } else {
-            // TODO update here
+            const last_update_ms = Date.now();
+            const last_update = [
+                new Date(last_update_ms).getHours(),
+                new Date(last_update_ms).getMinutes(),
+                new Date(last_update_ms).getSeconds(),
+            ];
             return (
-                <p>Hello World</p> 
+                <p> No drone violation recorded yet! Last checked at: {last_update[0] + ":" + last_update[1]
+                    + ":" + last_update[2]}
+                </p>
             );
         }
-
     }
+    const last_update_ms = Date.now();
+    const last_update = [
+        new Date(last_update_ms).getHours(),
+        new Date(last_update_ms).getMinutes(),
+        new Date(last_update_ms).getSeconds(),
+    ];
     return (
         <div>
-            {/* TODO: <create view here> */}
-            <p> modify empty val</p>
+            <p> No drone violation recorded yet! Last checked at: {last_update[0] + ":" + last_update[1]
+                + ":" + last_update[2]}
+            </p>
         </div>
     )
 }
