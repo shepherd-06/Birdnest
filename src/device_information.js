@@ -22,8 +22,18 @@ function DeviceInformation(props) {
             </div>
         );
     } else {
+        const last_update_ms = Date.now();
+        const last_update = [
+            new Date(last_update_ms).getHours(),
+            new Date(last_update_ms).getMinutes(),
+            new Date(last_update_ms).getSeconds(),
+        ];
         return (<div className="row">
-            <p> Unable to load information! </p>
+            <p> No update Yet! </p>
+            <p>
+                Last checked at: {last_update[0] + ":" + last_update[1]
+                    + ":" + last_update[2]}
+            </p>
         </div>);
     }
 }
