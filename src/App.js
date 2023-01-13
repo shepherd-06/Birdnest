@@ -6,6 +6,7 @@ import { XMLParser } from 'fast-xml-parser';
 
 import Drone from './drone';
 import DeviceInformation from './device_information';
+import { isValid, checkViolation, filter } from './utility';
 
 class App extends React.Component {
 
@@ -16,79 +17,6 @@ class App extends React.Component {
       drones: null, // all drone list (from local_storage + API)
       last_update_ms: null, //last updated. value updates every 2s
     };
-  }
-
-
-  getDistance(x, y) {
-    /**
-     * takes x, y and calculates the distance from the center (250000,250000)
-     * 
-     * returns distance
-     */
-    let x1 = x - 250000;
-    let y1 = y - 250000;
-
-    return Math.sqrt(x1 * x1 + y1 * y1);
-  }
-
-  checkViolation(new_drones) {
-    /**
-     * checks drone violation.
-     * calculate the distance from the nest.
-     * could return empty list, if no violation
-     * add the violation time in the list.
-     * 
-     * returns list. 
-     */
-
-    let violated_drones = [];
-    for (let i = 0; i < new_drones.length; i++) {
-      let positionX = new_drones[i]["positionX"];
-      let positionY = new_drones[i]["positionY"];
-      let distance = this.getDistance(positionX, positionY);
-
-      if (distance <= 100000) {
-        new_drones[i]["distance"] = distance / 1000;
-        new_drones[i]["last_seen"] = Date.now();
-
-        violated_drones = violated_drones.concat(new_drones[i]);
-      }
-    }
-    console.log("total drones ", new_drones.length, " violation ", violated_drones.length);
-    return violated_drones;
-  }
-
-  filter(old_drones, new_drones) {
-    /**
-     *  check if new data already exist in the list,
-     *  and update the latest position
-     * 
-     *  TODO: there's a bug in this function. it repeats the same drone multiple times.
-     */
-    console.log("old drones ", old_drones["drones"].length, " new drones ", new_drones.length);
-    let new_added = 0;
-
-    for (let i = 0; i < new_drones.length; i++) {
-      const serial_number = new_drones[i]["serialNumber"];
-      let is_found = false;
-      for (let j = 0; j < old_drones["drones"].length; j++) {
-        if (old_drones["drones"][j]["serialNumber"] === serial_number) {
-          // drone exist in the list. update the information.
-          old_drones["drones"][j]["distance"] = new_drones[i]["distance"];
-          old_drones["drones"][j]["last_seen"] = new_drones[i]["last_seen"];
-          is_found = true;
-          break;
-        }
-      }
-
-      if (!is_found) {
-        // no match in the existing list. can be added directly
-        old_drones["drones"] = old_drones["drones"].concat(new_drones[i]);
-        new_added += 1;
-      }
-    }
-    console.log("new added in the list ", new_added);
-    return old_drones;
   }
 
   getLocalData() {
@@ -142,7 +70,7 @@ class App extends React.Component {
             }
           }
           // violation filter
-          new_drones = this.checkViolation(new_drones);
+          new_drones = checkViolation(new_drones);
 
           if (new_drones.length !== 0) {
             // no need to trigger anything, unless there's a violation!
@@ -153,7 +81,7 @@ class App extends React.Component {
               }
             } else {
               // filter old drone position with new position here.
-              drone_list = this.filter(drone_list, new_drones);
+              drone_list = filter(drone_list, new_drones);
             }
             localStorage.setItem('drones', JSON.stringify(drone_list));
 
@@ -170,11 +98,16 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    // update the view?
+    // this happens once.
     this.getLocalData();
     setInterval(() => {
+      // this will call every X seconds.
       this.mainEngine();
-    }, 15000);
+    }, 15000); // <- change this to 2000 for production.
+
+    setInterval(() => {
+
+    }, 60000);
   }
 
   render() {
