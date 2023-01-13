@@ -40,8 +40,8 @@ class App extends React.Component {
      * 
      * returns list. 
      */
-    let violated_drones = [];
 
+    let violated_drones = [];
     for (let i = 0; i < new_drones.length; i++) {
       let positionX = new_drones[i]["positionX"];
       let positionY = new_drones[i]["positionY"];
@@ -54,6 +54,7 @@ class App extends React.Component {
         violated_drones = violated_drones.concat(new_drones[i]);
       }
     }
+    console.log("total drones ", new_drones.length, " violation ", violated_drones.length);
     return violated_drones;
   }
 
@@ -64,23 +65,26 @@ class App extends React.Component {
      * 
      *  TODO: there's a bug in this function. it repeats the same drone multiple times.
      */
-    let temp_list = [];
-    for (let i = 0; i < new_drones.length; i++) {
-      let serial_number = new_drones[i]["serialNumber"];
+    console.log("old drones ", old_drones["drones"].length, " new drones ", new_drones.length);
 
+    for (let i = 0; i < new_drones.length; i++) {
+      const serial_number = new_drones[i]["serialNumber"];
+      let is_found = false;
       for (let j = 0; j < old_drones["drones"].length; j++) {
-        if (old_drones["drones"]["serialNumber"] === serial_number) {
+        if (old_drones["drones"][j]["serialNumber"] === serial_number) {
           // drone exist in the list. update the information.
-          old_drones["drones"]["distance"] = new_drones["distance"];
-          old_drones["drones"]["last_seen"] = new_drones["last_seen"];
-        } else {
-          // new drone. add in the list
-          // temp_list = temp_list.concat(new_drones[i]);
-          old_drones["drones"] = old_drones["drones"].concat(new_drones[i]);
+          old_drones["drones"][j]["distance"] = new_drones[i]["distance"];
+          old_drones["drones"][j]["last_seen"] = new_drones[i]["last_seen"];
+          is_found = true;
+          break;
         }
       }
+
+      if (!is_found) {
+        // no match in the existing list. can be added directly
+        old_drones["drones"] = old_drones["drones"].concat(new_drones[i]);
+      }
     }
-    // old_drones["drones"] = old_drones["drones"].concat(temp_list);
     return old_drones;
   }
 
@@ -98,6 +102,7 @@ class App extends React.Component {
         drones: drone_list,
         last_update_ms: Date.now(),
       });
+      localStorage.setItem('drones', JSON.stringify(drone_list));
     }
 
     axios.get('https://assignments.reaktor.com/birdnest/drones/', {
@@ -119,26 +124,35 @@ class App extends React.Component {
           // violation filter
           new_drones = this.checkViolation(new_drones);
 
-          if (drone_list["drones"].length === 0) {
-            // no need to filter anything.
-            drone_list = {
-              "drones": new_drones
+          if (new_drones.length !== 0) {
+            // no need to trigger anything, unless there's a violation!
+            if (drone_list["drones"].length === 0) {
+              // no need to filter anything.
+              drone_list = {
+                "drones": new_drones
+              }
+            } else {
+              // filter old drone position with new position here.
+              drone_list = this.filter(drone_list, new_drones);
             }
-          } else {
-            // filter old drone position with new position here.
-            drone_list = this.filter(drone_list, new_drones);
-          }
-          localStorage.setItem('drones', JSON.stringify(drone_list));
+            localStorage.setItem('drones', JSON.stringify(drone_list));
 
-          this.setState({
-            drones: drone_list,
-            last_update_ms: Date.now(),
-          })
+            this.setState({
+              drones: drone_list,
+              last_update_ms: Date.now(),
+            })
+          }
         }
       })
       .catch((error) => {
         console.log(error);
       });
+
+    // setInterval(() => {
+    //   /*
+    //       Run any function or setState here
+    //   */
+    // }, 5000);
   }
 
   render() {
