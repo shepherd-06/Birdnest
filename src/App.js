@@ -25,6 +25,7 @@ class App extends React.Component {
      * if any data is more than 10 m old, it would be deleted.
      * it will also delete the pilot's information from localStorage by serialNumber.
      */
+    console.log("validity check");
     let drone_list = localStorage.getItem('drones');
     drone_list = JSON.parse(drone_list);
     const ten_m = 600000; // 10 minutes in ms
@@ -148,7 +149,7 @@ class App extends React.Component {
 
     setInterval(() => {
       this.isValid();
-    }, 300000); // <- this value should be equal to Either 1 M or 5 M in production.
+    }, 50000); // <- this value should be equal to Either 1 M or 5 M in production.
   }
 
   render() {
@@ -165,11 +166,11 @@ class App extends React.Component {
                 <h1 className="display-4"> Violated Drone List</h1>
                 <Drone props={this.state.drones} />
               </div>
-              <div className='col-md-3'></div>
-              <div className="col-md-4">
+              <div className='col-md-2'></div>
+              <div className="col-md-5">
                 {/* this pane will be used to view random information, like last check, current time etc */}
                 <div className="row">
-                  <h1 className="display-4"> Device and Update Information</h1>
+                  <h4 className="display-4"> Device and Update Information</h4>
                   <DeviceInformation
                     props={[this.state.information, this.state.last_update_ms]} />
                 </div>
