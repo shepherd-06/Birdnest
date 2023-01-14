@@ -34,9 +34,14 @@ class App extends React.Component {
         };
         localStorage.setItem('drones', JSON.stringify(drone_list));
       }
+      let information = {
+        "total_drones": drone_list["drones"].length,
+        "last_violation": 'Not Calculated Yet',
+      }
       this.setState({
         drones: drone_list,
         last_update_ms: Date.now(),
+        information: information,
       });
       return drone_list;
     }
@@ -60,15 +65,7 @@ class App extends React.Component {
         let parsed_xml = new XMLParser().parse(textResponse['data']);
         let report_data = parsed_xml['report'];
         if (report_data) {
-          let device_information = report_data["deviceInformation"];
           let new_drones = report_data["capture"]["drone"];
-          if (device_information !== null) {
-            if (device_information !== 'undefined') {
-              this.setState({
-                information: device_information,
-              })
-            }
-          }
           // violation filter
           new_drones = checkViolation(new_drones);
 
@@ -88,6 +85,16 @@ class App extends React.Component {
             this.setState({
               drones: drone_list,
               last_update_ms: Date.now(),
+              information: {
+                "total_drones": drone_list["drones"].length,
+                "last_violation": new_drones.length,
+              }
+            })
+          } else {
+            this.setState({
+              information: {
+                "last_violation": new_drones.length,
+              }
             })
           }
         }
@@ -101,13 +108,12 @@ class App extends React.Component {
     // this happens once.
     this.getLocalData();
     setInterval(() => {
-      // this will call every X seconds.
       this.mainEngine();
-    }, 15000); // <- change this to 2000 for production.
+    }, 15000); // <- change this to 2 S in production.
 
     setInterval(() => {
-
-    }, 60000);
+      isValid();
+    }, 60000000); // <- this value should be equal to 1 M in production
   }
 
   render() {

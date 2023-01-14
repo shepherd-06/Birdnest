@@ -14,11 +14,12 @@ function DeviceInformation(props) {
 
         return (
             <div className="row">
-                <p> Device Started: {information["deviceStarted"]} </p>
-                <p> Update Interval: {information["updateIntervalMs"]} ms </p>
-                <p>    Last Updated at: {last_update[0] + " / " + last_update[1] + " / "
+                <p> Total Violated Drones: {information["total_drones"]} </p>
+                <p> Update Interval: 2s </p>
+                <p> Last Updated at: {last_update[0] + " / " + last_update[1] + " / "
                     + last_update[2] + " at " + last_update[3] + ":" + last_update[4]
                     + ":" + last_update[5]} </p>
+                <p> Number of drones added: {information["last_violation"]}</p>
             </div>
         );
     } else {

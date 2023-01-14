@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const isValid = () => {
     /**
      * Purpose of this function is to check validity of data currently present in localStorage
@@ -33,7 +35,6 @@ export const checkViolation = (new_drones) => {
         let positionY = new_drones[i]["positionY"];
         // let distance = this.getDistance(positionX, positionY);
         let distance = getDistance(positionX, positionY);
-        console.log(distance);
 
         if (distance <= 100000) {
             new_drones[i]["distance"] = distance / 1000;
@@ -53,7 +54,6 @@ export const filter = (old_drones, new_drones) => {
      *  and update the latest position
      */
     console.log("[old drones ", old_drones["drones"].length, " new drones ", new_drones.length, " ]");
-    let new_added = 0;
 
     for (let i = 0; i < new_drones.length; i++) {
         const serial_number = new_drones[i]["serialNumber"];
@@ -71,9 +71,62 @@ export const filter = (old_drones, new_drones) => {
         if (!is_found) {
             // no match in the existing list. can be added directly
             old_drones["drones"] = old_drones["drones"].concat(new_drones[i]);
-            new_added += 1;
+            // this will add a new pilot information
+            getPilotInformation(serial_number);
         }
     }
-    console.log("new added in the list ", new_added);
     return old_drones;
+}
+
+export const getPilotInformation = (serialNumber) => {
+    /**
+     * Get Pilot Information if it doesn't already exist in storage.
+     * if present, increase number of violation by 1.
+     * else, init by 1.
+     * 
+     * if pilot information not present, then create an empty entry in localStorage.
+     */
+    let pilot_information = localStorage.getItem('serialNumber');
+    pilot_information = JSON.parse(pilot_information);
+    let old_data_exist = false;
+
+    if (pilot_information != null) {
+        if (pilot_information["data_exist"]) {
+            // pilot information already exist. just update incident number.
+            pilot_information["violation"] += 1;
+            localStorage.setItem(serialNumber, JSON.stringify(pilot_information));
+            old_data_exist = true;
+        }
+    }
+
+    if (!old_data_exist) {
+        const URL = "https://assignments.reaktor.com/birdnest/pilots/".concat(serialNumber)
+        axios.get(URL, {
+            'Access-Control-Allow-Origin': '*',
+        }).then((response) => {
+            response = response["data"];
+            response["data_exist"] = true;
+
+            if (pilot_information === null) {
+                response["violation"] = 1;
+            } else {
+                response["violation"] = pilot_information["violation"] + 1;
+            }
+            localStorage.setItem(serialNumber, JSON.stringify(response));
+        }
+        ).catch((error) => {
+            if (error.response) {
+                console.log(error.response.status, serialNumber);
+                let data = {
+                    "data_exist": false
+                }
+                if (pilot_information === null) {
+                    data["violation"] = 1;
+                } else {
+                    data["violation"] = pilot_information["violation"] + 1;
+                }
+                localStorage.setItem(serialNumber, JSON.stringify(data));
+            }
+        });
+    }
 }
