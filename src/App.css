@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.btn_custom {
+  width: 100%;
+}
+
+.item_custom {
+  margin-top: 1.5%;
+  margin-bottom: 1.5%;
+}

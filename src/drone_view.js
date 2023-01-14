@@ -8,12 +8,12 @@ class DroneView extends React.Component {
         let last_seen_ms = this.props.drone["last_seen"];
         return (
             <div className="row">
-                <li key={this.props.id} className="list-group-item" >
+                <li key={this.props.id} className="list-group-item item_custom" >
                     <p>Drone Model: {this.props.drone["model"]}</p>
                     <p>Drone Serial Number: {this.props.drone["serialNumber"]}</p>
                     <p>Distance To Nest: {this.props.drone["distance"].toFixed(2)} m</p>
                     <p>Last Seen At: {new Date(last_seen_ms).toLocaleString('en-GB')}</p>
-                    <button type="button" className="btn btn-info" onClick={showPilotInformation}> Pilot Information </button>
+                    <button type="button" className="btn btn-dark btn_custom" onClick={showPilotInformation}> Pilot Information </button>
                     {/* need some bottom padding. */}
                 </li>
             </div>
