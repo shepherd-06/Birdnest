@@ -144,32 +144,37 @@ class App extends React.Component {
     this.getLocalData();
     setInterval(() => {
       this.mainEngine();
-    }, 150000); // <- change this to 2 S in production.
+    }, 10000); // <- change this to 2 S in production.
 
     setInterval(() => {
       this.isValid();
-    }, 6000); // <- this value should be equal to Either 1 M or 5 M in production.
+    }, 300000); // <- this value should be equal to Either 1 M or 5 M in production.
   }
 
   render() {
     return (
       <div className="container">
         <div className="row">
+          <h1 className="display-1 App">Birdnest Project</h1>
+          <hr/>
           <div className="col-lg-12">
             <br />
-            <div className="col-md-6">
-              {/* this pane will be used to view random information, like last check, current time etc */}
-              <div className="row">
-                <h1> Device and Update Information</h1>
-                <DeviceInformation
-                  props={[this.state.information, this.state.last_update_ms]} />
+            <div className='row'>
+              <div className="col-md-5">
+                {/* we will view the list of drones in the left side of the pane. */}
+                <h1 className="display-4"> Violated Drone List</h1>
+                <Drone props={this.state.drones} />
               </div>
-            </div>
-            <br />
-            <div className="col-md-6">
-              {/* we will view the list of drones in the left side of the pane. */}
-              <h1> Violated Drone List</h1>
-              <Drone props={this.state.drones} />
+              <div className='col-md-3'></div>
+              <div className="col-md-4">
+                {/* this pane will be used to view random information, like last check, current time etc */}
+                <div className="row">
+                  <h1 className="display-4"> Device and Update Information</h1>
+                  <DeviceInformation
+                    props={[this.state.information, this.state.last_update_ms]} />
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

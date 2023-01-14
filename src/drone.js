@@ -5,7 +5,7 @@ function Drone(props) {
         let drone_list = props["props"]["drones"];
         if (drone_list.length !== 0) {
             return (
-                <ol key="oi">
+                <ol key="oi" className='list-group'>
                     {
                         drone_list.map((value, index) => {
                             return <DroneView
