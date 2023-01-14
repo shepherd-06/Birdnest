@@ -1,12 +1,5 @@
 import axios from 'axios';
 
-export const isValid = () => {
-    /**
-     * Purpose of this function is to check validity of data currently present in localStorage
-     * if any data is more than 10 m old, it would be deleted.
-     */
-}
-
 export const getDistance = (x, y) => {
     /**
      * takes x, y and calculates the distance from the center (250000,250000)

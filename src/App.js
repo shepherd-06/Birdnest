@@ -6,7 +6,7 @@ import { XMLParser } from 'fast-xml-parser';
 
 import Drone from './drone';
 import DeviceInformation from './device_information';
-import { isValid, checkViolation, filter } from './utility';
+import { checkViolation, filter } from './utility';
 
 class App extends React.Component {
 
@@ -17,6 +17,41 @@ class App extends React.Component {
       drones: null, // all drone list (from local_storage + API)
       last_update_ms: null, //last updated. value updates every 2s
     };
+  }
+
+  isValid() {
+    /**
+     * Purpose of this function is to check validity of data currently present in localStorage
+     * if any data is more than 10 m old, it would be deleted.
+     * it will also delete the pilot's information from localStorage by serialNumber.
+     */
+    let drone_list = localStorage.getItem('drones');
+    drone_list = JSON.parse(drone_list);
+    const ten_m = 600000; // 10 minutes in ms
+    let total_expire = 0;
+
+    if (drone_list != null) {
+      for (let i = 0; i < drone_list["drones"].length; i++) {
+        let serialNumber = drone_list["drones"][i]["serialNumber"];
+        let lastSeen = drone_list["drones"][i]["last_seen"];
+
+        if (lastSeen + ten_m < Date.now()) {
+          // expired milk
+          total_expire += 1;
+          drone_list["drones"].splice(i, 1);
+          i--; // fixing index issue.
+
+          // remove pilot information
+          localStorage.removeItem(serialNumber);
+        }
+      }
+      console.log("total expire ", total_expire, " array length ", drone_list["drones"].length);
+      localStorage.setItem('drones', JSON.stringify(drone_list));
+      this.setState({
+        drones: drone_list,
+        last_update_ms: Date.now(),
+      });
+    }
   }
 
   getLocalData() {
@@ -109,11 +144,11 @@ class App extends React.Component {
     this.getLocalData();
     setInterval(() => {
       this.mainEngine();
-    }, 15000); // <- change this to 2 S in production.
+    }, 150000); // <- change this to 2 S in production.
 
     setInterval(() => {
-      isValid();
-    }, 60000000); // <- this value should be equal to 1 M in production
+      this.isValid();
+    }, 6000); // <- this value should be equal to Either 1 M or 5 M in production.
   }
 
   render() {
