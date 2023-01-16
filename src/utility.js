@@ -41,46 +41,43 @@ export const checkViolation = (new_drones) => {
 }
 
 
-export const filter = (old_drones, new_drones) => {
+export const filterAndInsert = (old_drones, new_drones) => {
     /**
      *  filter will check if there's already a drone exist. 
      *  if data distance to nest is closest, then it will update.
-     *  otherwise reject from the list.
+     *  if there's no entry, then it will insert.
      * 
-     *  :returns [old_drones, new_drones]
+     *  :returns old_drones
      */
     console.log("[old drones ", old_drones["drones"].length, " new drones ", new_drones.length, " ]");
 
     for (let i = 0; i < new_drones.length; i++) {
         const serial_number = new_drones[i]["serialNumber"];
+        const distance = new_drones[i]["distance"];
         let is_found = false;
         for (let j = 0; j < old_drones["drones"].length; j++) {
             if (old_drones["drones"][j]["serialNumber"] === serial_number) {
                 // drone exist in the list. update the information.
-                console.log("Duplication found ", serial_number);
-                if (old_drones["drones"][j]["distance"] > new_drones[i]["distance"]) {
+                console.log("Duplication found ", serial_number, " > ", old_drones["drones"][j]["distance"], " ", distance);
+                if (old_drones["drones"][j]["distance"] > distance) {
                     // only updating closest confirmed distance.
                     console.log("smallest distance recorded ", old_drones["drones"][j]["distance"], new_drones[i]["distance"]);
                     old_drones["drones"][j]["distance"] = new_drones[i]["distance"];
                     old_drones["drones"][j]["last_seen"] = new_drones[i]["last_seen"];
-
-                    // TODO: this will also trigger a sort! WTD
                 }
                 is_found = true;
-                new_drones.splice(i, 1); // delete the current entry from the list.
-                i--; // fixing index issue.
                 break;
             }
         }
 
         if (!is_found) {
             // no match in the existing list. will be added after sorting.
-            // old_drones["drones"] = old_drones["drones"].concat(new_drones[i]);
+            old_drones["drones"] = old_drones["drones"].concat(new_drones[i]);
             // this will add a new pilot information
             getPilotInformation(serial_number);
         }
     }
-    return [old_drones, new_drones]; // return both list
+    return old_drones
 }
 
 export const getPilotInformation = (serialNumber) => {

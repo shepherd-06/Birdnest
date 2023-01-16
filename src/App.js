@@ -6,7 +6,7 @@ import { XMLParser } from 'fast-xml-parser';
 
 import Drone from './drone';
 import DeviceInformation from './device_information';
-import { checkViolation, filter, sort } from './utility';
+import { checkViolation, filterAndInsert } from './utility';
 
 class App extends React.Component {
 
@@ -120,10 +120,7 @@ class App extends React.Component {
               }
             } else {
               // filter old drone position with new position here.
-              const temp_val = filter(drone_list, new_drones);
-              drone_list = temp_val[0];
-              new_drones = temp_val[1];
-              drone_list = sort(drone_list, new_drones);
+              drone_list = filterAndInsert(drone_list, new_drones);
             }
             localStorage.setItem('drones', JSON.stringify(drone_list));
 
