@@ -13,9 +13,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      information: null, // last data from API
       drones: null, // all drone list (from local_storage + API)
       last_update_ms: null, //last updated. value updates every 2s
+      total_drones: null,
+      last_violation: null,
+      last_expired: null,
+      last_expired_at: null,
     };
   }
 
@@ -50,12 +53,9 @@ class App extends React.Component {
       localStorage.setItem('drones', JSON.stringify(drone_list));
       this.setState({
         drones: drone_list,
-        last_update_ms: Date.now(),
-        information: {
-          "total_drones": drone_list["drones"].length,
-          "last_expired": total_expire,
-          "last_violation": (this.state.information == null) ? 0 : this.state.information["last_violation"],
-        }
+        last_expired_at: Date.now(),
+        total_drones: drone_list["drones"].length,
+        last_expired: total_expire,
       });
     }
   }
@@ -75,15 +75,13 @@ class App extends React.Component {
         };
         localStorage.setItem('drones', JSON.stringify(drone_list));
       }
-      let information = {
-        "total_drones": drone_list["drones"].length,
-        "last_violation": 'Not Calculated Yet',
-        "last_expired": 0,
-      }
+
       this.setState({
         drones: drone_list,
         last_update_ms: Date.now(),
-        information: information,
+        total_drones: drone_list["drones"].length,
+        last_violation: 'Not Calculated Yet',
+        last_expired: 0,
       });
       return drone_list;
     }
@@ -127,17 +125,13 @@ class App extends React.Component {
             this.setState({
               drones: drone_list,
               last_update_ms: Date.now(),
-              information: {
-                "total_drones": drone_list["drones"].length,
-                "last_violation": new_drones.length,
-              }
+              total_drones: drone_list["drones"].length,
+              last_violation: new_drones.length,
             })
           } else {
             this.setState({
-              information: {
-                "total_drones": drone_list["drones"].length,
-                "last_violation": new_drones.length,
-              }
+              total_drones: drone_list["drones"].length,
+              last_violation: new_drones.length,
             })
           }
         }
@@ -162,6 +156,12 @@ class App extends React.Component {
   }
 
   render() {
+    let information = {
+      "total_drones": this.state.total_drones,
+      "last_violation": this.state.last_violation,
+      "last_expired": this.state.last_expired,
+      "last_expired_at": this.state.last_expired_at,
+    }
     return (
       <div className="container">
         <div className="row">
@@ -179,9 +179,9 @@ class App extends React.Component {
               <div className="col-md-5">
                 {/* this pane will be used to view random information, like last check, current time etc */}
                 <div className="row">
-                  <h4 className="display-4"> Device and Update Information</h4>
+                  <h4 className="display-4"> Update Information</h4> <br />
                   <DeviceInformation
-                    props={[this.state.information, this.state.last_update_ms]} />
+                    props={[information, this.state.last_update_ms]} />
                 </div>
               </div>
 

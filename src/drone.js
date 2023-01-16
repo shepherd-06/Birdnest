@@ -17,32 +17,20 @@ function Drone(props) {
                 </ol >
             );
         } else {
-            const last_update_ms = Date.now();
-            const last_update = [
-                new Date(last_update_ms).getHours(),
-                new Date(last_update_ms).getMinutes(),
-                new Date(last_update_ms).getSeconds(),
-            ];
+            const last_update = Date.now().toLocaleString('en-GB');
             return (
-                <p> No drone violation recorded yet! Last checked at: {last_update[0] + ":" + last_update[1]
-                    + ":" + last_update[2]}
+                <p>
+                    No drone violation recorded yet! Last checked at: {last_update}
                 </p>
             );
         }
     }
-    const last_update_ms = Date.now();
-    const last_update = [
-        new Date(last_update_ms).getHours(),
-        new Date(last_update_ms).getMinutes(),
-        new Date(last_update_ms).getSeconds(),
-    ];
+    const last_update = Date.now().toLocaleString('en-GB');
     return (
-        <div>
-            <p> No drone violation recorded yet! Last checked at: {last_update[0] + ":" + last_update[1]
-                + ":" + last_update[2]}
-            </p>
-        </div>
-    )
+        <p>
+            No drone violation recorded yet! Last checked at: {last_update}
+        </p>
+    );
 }
 
 export default Drone;
