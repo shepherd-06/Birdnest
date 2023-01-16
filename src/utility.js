@@ -36,7 +36,7 @@ export const checkViolation = (new_drones) => {
             violated_drones = violated_drones.concat(new_drones[i]);
         }
     }
-    console.log("new drones --> ", new_drones.length, " violation --> ", violated_drones.length);
+    console.log("total drones --> ", new_drones.length, " violation --> ", violated_drones.length);
     return violated_drones;
 }
 
@@ -61,6 +61,7 @@ export const filterAndInsert = (old_drones, new_drones) => {
                 console.log("Duplication found ", serial_number, " > ", old_drones["drones"][j]["distance"], " ", distance);
                 if (old_drones["drones"][j]["distance"] > distance) {
                     // only updating closest confirmed distance.
+                    console.log("smallest distance recorded ", old_drones["drones"][j]["distance"], new_drones[i]["distance"]);
                     old_drones["drones"][j]["distance"] = new_drones[i]["distance"];
                     old_drones["drones"][j]["last_seen"] = new_drones[i]["last_seen"];
                 }
