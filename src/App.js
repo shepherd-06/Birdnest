@@ -48,6 +48,7 @@ class App extends React.Component {
       }
       console.log("total expire ", total_expire, " array length ", drone_list["drones"].length);
       localStorage.setItem('drones', JSON.stringify(drone_list));
+      console.log(drone_list);
       this.setState({
         drones: drone_list,
         last_update_ms: Date.now(),
@@ -143,6 +144,8 @@ class App extends React.Component {
   componentDidMount() {
     // this happens once.
     this.getLocalData();
+    this.isValid(); // check if validity exist
+
     setInterval(() => {
       this.mainEngine();
     }, 10000); // <- change this to 2 S in production.
@@ -156,8 +159,8 @@ class App extends React.Component {
     return (
       <div className="container">
         <div className="row">
-          <h1 className="display-1 App">Birdnest Project</h1>
-          <hr/>
+          <h1 className="display-1 App">PROJECT BIRDNEST</h1>
+          <hr />
           <div className="col-lg-12">
             <br />
             <div className='row'>

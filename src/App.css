@@ -32,6 +32,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -42,6 +43,26 @@
 }
 
 .item_custom {
-  margin-top: 1.5%;
-  margin-bottom: 1.5%;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+
+.collapse {
+  display: none
+}
+
+.collapse.in {
+  display: block;
+  margin-top: 0.3em;
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+  border-radius: 0.5em;
+  background-color: #4d5159;
+  color: aliceblue;
+}
+
+.info {
+  padding-top: 1em;
+  padding-bottom: 0.2em;
 }
