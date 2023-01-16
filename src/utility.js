@@ -53,31 +53,20 @@ export const filter = (old_drones, new_drones) => {
 
     for (let i = 0; i < new_drones.length; i++) {
         const serial_number = new_drones[i]["serialNumber"];
-        let is_found = false;
+        const distance = new_drones[i]["distance"];
+
         for (let j = 0; j < old_drones["drones"].length; j++) {
             if (old_drones["drones"][j]["serialNumber"] === serial_number) {
                 // drone exist in the list. update the information.
-                console.log("Duplication found ", serial_number);
-                if (old_drones["drones"][j]["distance"] > new_drones[i]["distance"]) {
-                    // only updating closest confirmed distance.
-                    console.log("smallest distance recorded ", old_drones["drones"][j]["distance"], new_drones[i]["distance"]);
-                    old_drones["drones"][j]["distance"] = new_drones[i]["distance"];
-                    old_drones["drones"][j]["last_seen"] = new_drones[i]["last_seen"];
-
-                    // TODO: this will also trigger a sort! WTD
+                console.log("Duplication found ", serial_number, " [", old_drones["drones"][j]["distance"], " ", distance);
+                if (old_drones["drones"][j]["distance"] > distance) {
+                    // new confirmed distance found. I will insert it after sorting.
+                    // deleting old entry.
+                    localStorage.removeItem(old_drones["drones"][j]["serialNumber"]);
+                    old_drones["drones"].splice(j, 1); // delete the current entry from the list.
                 }
-                is_found = true;
-                new_drones.splice(i, 1); // delete the current entry from the list.
-                i--; // fixing index issue.
                 break;
             }
-        }
-
-        if (!is_found) {
-            // no match in the existing list. will be added after sorting.
-            // old_drones["drones"] = old_drones["drones"].concat(new_drones[i]);
-            // this will add a new pilot information
-            getPilotInformation(serial_number);
         }
     }
     return [old_drones, new_drones]; // return both list
@@ -144,6 +133,7 @@ export const sort = (old_drones, new_drones) => {
     for (let i = 0; i < new_drones.length; i++) {
         const distance = new_drones[i]["distance"];
         let isSorted = false;
+        const serial_number = new_drones[i]["serialNumber"];
 
         for (let j = 0; j < old_drones["drones"].length; j++) {
             if (old_drones["drones"][j]["distance"] >= distance) {
@@ -158,6 +148,7 @@ export const sort = (old_drones, new_drones) => {
         if (!isSorted) {
             old_drones["drones"].push(new_drones[i]);
         }
+        getPilotInformation(serial_number); // adding newly added pilot
     }
     return old_drones;
 }
