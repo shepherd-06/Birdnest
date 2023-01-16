@@ -17,7 +17,7 @@ function Drone(props) {
                 </ol >
             );
         } else {
-            const last_update = Date.now().toLocaleString('en-GB');
+            const last_update = new Date().toLocaleString('en-GB');
             return (
                 <p>
                     No drone violation recorded yet! Last checked at: {last_update}
@@ -25,7 +25,7 @@ function Drone(props) {
             );
         }
     }
-    const last_update = Date.now().toLocaleString('en-GB');
+    const last_update = new Date().toLocaleString('en-GB');
     return (
         <p>
             No drone violation recorded yet! Last checked at: {last_update}
