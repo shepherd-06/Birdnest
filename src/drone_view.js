@@ -28,7 +28,6 @@ class DroneView extends React.Component {
                     <button type="button" className="btn btn-dark btn_custom"
                         onClick={this.toggle.bind(this)}
                     > Pilot Information </button>
-                    {/* need some bottom padding. */}
 
                     <div className={"row collapse" + (this.state.isModalOpen ? ' in' : '')}>
                         <div>
