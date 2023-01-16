@@ -148,7 +148,7 @@ class App extends React.Component {
 
     setInterval(() => {
       this.mainEngine();
-    }, 10000); // <- change this to 2 S (2000 ms) in production.
+    }, 2000); // <- change this to 2 S (2000 ms) in production.
 
     setInterval(() => {
       this.isValid();
