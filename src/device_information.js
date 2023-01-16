@@ -9,6 +9,7 @@ function DeviceInformation(props) {
                 <p> Update Interval: 2s </p>
                 <p> Last Updated at: {last_update} </p>
                 <p> Number of drones added: {information["last_violation"]}</p>
+                <p> Number of drones expired: {information["last_expired"]}</p>
             </div>
         );
     } else {

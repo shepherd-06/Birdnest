@@ -6,7 +6,7 @@ import { XMLParser } from 'fast-xml-parser';
 
 import Drone from './drone';
 import DeviceInformation from './device_information';
-import { checkViolation, filter } from './utility';
+import { checkViolation, filter, sort } from './utility';
 
 class App extends React.Component {
 
@@ -51,6 +51,11 @@ class App extends React.Component {
       this.setState({
         drones: drone_list,
         last_update_ms: Date.now(),
+        information: {
+          "total_drones": drone_list["drones"].length,
+          "last_expired": total_expire,
+          "last_violation": (this.state.information == null) ? 0 : this.state.information["last_violation"],
+        }
       });
     }
   }
@@ -73,6 +78,7 @@ class App extends React.Component {
       let information = {
         "total_drones": drone_list["drones"].length,
         "last_violation": 'Not Calculated Yet',
+        "last_expired": 0,
       }
       this.setState({
         drones: drone_list,
@@ -114,7 +120,10 @@ class App extends React.Component {
               }
             } else {
               // filter old drone position with new position here.
-              drone_list = filter(drone_list, new_drones);
+              const temp_val = filter(drone_list, new_drones);
+              drone_list = temp_val[0];
+              new_drones = temp_val[1];
+              drone_list = sort(drone_list, new_drones);
             }
             localStorage.setItem('drones', JSON.stringify(drone_list));
 
@@ -129,6 +138,7 @@ class App extends React.Component {
           } else {
             this.setState({
               information: {
+                "total_drones": drone_list["drones"].length,
                 "last_violation": new_drones.length,
               }
             })
