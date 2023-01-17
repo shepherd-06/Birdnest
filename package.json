@@ -1,6 +1,7 @@
 {
   "name": "birdnest",
   "version": "0.1.0",
+  "homepage": "https://magenta-pika-11ca8c.netlify.app/",
   "private": true,
   "dependencies": {
     "axios": "^1.2.2",
