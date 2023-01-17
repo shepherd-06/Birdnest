@@ -1,6 +1,10 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/57e646ac-f9d3-4496-825b-5eaff8209115/deploy-status?branch=master)](https://app.netlify.com/sites/magenta-pika-11ca8c/deploys)
+
 # BirdNest
 
 This project is a pre-assignment for Reaktor Summer Trainee. Details of the assignment is in https://assignments.reaktor.com/birdnest/.
+
+Project URL: https://magenta-pika-11ca8c.netlify.app/
 
 ## Objective
 
