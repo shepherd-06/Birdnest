@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/birdnest/static/css/main.312bc670.css",
+    "main.js": "/birdnest/static/js/main.a7811315.js",
+    "static/js/496.cab41697.chunk.js": "/birdnest/static/js/496.cab41697.chunk.js",
+    "index.html": "/birdnest/index.html",
+    "main.312bc670.css.map": "/birdnest/static/css/main.312bc670.css.map",
+    "main.a7811315.js.map": "/birdnest/static/js/main.a7811315.js.map",
+    "496.cab41697.chunk.js.map": "/birdnest/static/js/496.cab41697.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.312bc670.css",
+    "static/js/main.a7811315.js"
+  ]
+}
