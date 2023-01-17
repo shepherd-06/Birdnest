@@ -1,6 +1,7 @@
 import DroneView from './drone_view';
 
 function Drone(props) {
+    const last_update = new Date(Date.now()).toLocaleString('en-GB');
     if (props["props"] != null) {
         let drone_list = props["props"]["drones"];
         if (drone_list.length !== 0) {
@@ -17,7 +18,6 @@ function Drone(props) {
                 </ol >
             );
         } else {
-            const last_update = Date.now().toLocaleString('en-GB');
             return (
                 <p>
                     No drone violation recorded yet! Last checked at: {last_update}
@@ -25,7 +25,6 @@ function Drone(props) {
             );
         }
     }
-    const last_update = Date.now().toLocaleString('en-GB');
     return (
         <p>
             No drone violation recorded yet! Last checked at: {last_update}

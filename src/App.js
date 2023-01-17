@@ -28,7 +28,7 @@ class App extends React.Component {
      * if any data is more than 10 m old, it would be deleted.
      * it will also delete the pilot's information from localStorage by serialNumber.
      */
-    console.log("validity check");
+    // console.log("validity check");
     let drone_list = localStorage.getItem('drones');
     drone_list = JSON.parse(drone_list);
     const ten_m = 600000; // 10 minutes in ms
@@ -49,7 +49,7 @@ class App extends React.Component {
           localStorage.removeItem(serialNumber);
         }
       }
-      console.log("total expire ", total_expire, " array length ", drone_list["drones"].length);
+      // console.log("total expire ", total_expire, " array length ", drone_list["drones"].length);
       localStorage.setItem('drones', JSON.stringify(drone_list));
       this.setState({
         drones: drone_list,

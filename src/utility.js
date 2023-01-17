@@ -36,7 +36,7 @@ export const checkViolation = (new_drones) => {
             violated_drones = violated_drones.concat(new_drones[i]);
         }
     }
-    console.log("total drones --> ", new_drones.length, " violation --> ", violated_drones.length);
+    // console.log("total drones --> ", new_drones.length, " violation --> ", violated_drones.length);
     return violated_drones;
 }
 
@@ -49,7 +49,7 @@ export const filterAndInsert = (old_drones, new_drones) => {
      * 
      *  :returns old_drones
      */
-    console.log("[old drones ", old_drones["drones"].length, " new drones ", new_drones.length, " ]");
+    // console.log("[old drones ", old_drones["drones"].length, " new drones ", new_drones.length, " ]");
 
     for (let i = 0; i < new_drones.length; i++) {
         const serial_number = new_drones[i]["serialNumber"];
@@ -58,10 +58,10 @@ export const filterAndInsert = (old_drones, new_drones) => {
         for (let j = 0; j < old_drones["drones"].length; j++) {
             if (old_drones["drones"][j]["serialNumber"] === serial_number) {
                 // drone exist in the list. update the information.
-                console.log("Duplication found ", serial_number, " > ", old_drones["drones"][j]["distance"], " ", distance);
+                // console.log("Duplication found ", serial_number, " > ", old_drones["drones"][j]["distance"], " ", distance);
                 if (old_drones["drones"][j]["distance"] > distance) {
                     // only updating closest confirmed distance.
-                    console.log("smallest distance recorded ", old_drones["drones"][j]["distance"], new_drones[i]["distance"]);
+                    // console.log("smallest distance recorded ", old_drones["drones"][j]["distance"], new_drones[i]["distance"]);
                     old_drones["drones"][j]["distance"] = new_drones[i]["distance"];
                     old_drones["drones"][j]["last_seen"] = new_drones[i]["last_seen"];
                 }
